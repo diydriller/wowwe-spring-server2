@@ -1,0 +1,43 @@
+package com.project.wowwe.common.exception;
+
+
+import com.project.wowwe.common.response.BaseResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@ControllerAdvice
+public class ExceptionAdvisor {
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
+    @ResponseBody
+    public BaseResponse handleValidationException(BindException ex){
+        BindingResult result = ex.getBindingResult();
+        List<String> errorList = new ArrayList<>();
+        result.getFieldErrors().forEach((fieldError) -> {
+            errorList.add(fieldError.getField()+" : "+fieldError.getDefaultMessage() +" : rejected value is "+fieldError.getRejectedValue());
+        });
+
+        return BaseResponse.builder()
+                .isSuccess(false)
+                .message(String.join(" / ",errorList))
+                .code(400)
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(BaseException.class)
+    @ResponseBody
+    public BaseResponse handleValidationException(BaseException ex){
+
+        return new BaseResponse(ex.getStatus());
+    }
+
+
+
+}

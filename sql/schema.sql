@@ -1,0 +1,42 @@
+CREATE TABLE IF NOT EXISTS video(
+    id BIGINT AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(100) NOT NULL,
+    thumnail_img VARCHAR(100) NOT NULL,
+    duration DOUBLE NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS users(
+    id BIGINT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(200) NOT NULL,
+    profile_img VARCHAR(100) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS like(
+    id BIGINT AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    video_id BIGINT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(video_id) REFERENCES video(id)
+);
+
+CREATE TABLE IF NOT EXISTS comment(
+   id BIGINT AUTO_INCREMENT,
+   comment TEXT NOT NULL,
+   user_id BIGINT NOT NULL,
+   video_id BIGINT NOT NULL,
+   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY(id),
+   FOREIGN KEY(user_id) REFERENCES users(id),
+   FOREIGN KEY(video_id) REFERENCES video(id)
+)
+
+
